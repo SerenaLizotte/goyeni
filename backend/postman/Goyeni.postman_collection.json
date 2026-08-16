@@ -1,0 +1,69 @@
+{
+  "info": {
+    "name": "Goyeni API",
+    "description": "Postman collection for the Goyeni backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Candidates",
+      "item": [
+        {
+          "name": "Get All Candidates",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/candidates"
+          }
+        },
+        {
+          "name": "Create Candidate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/candidates",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"headline\": \"QA Engineer\",\n  \"summary\": \"Experienced tester.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Candidate by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/candidates/:id",
+            "variable": [
+              {
+                "key": "id",
+                "value": "REPLACE_WITH_REAL_ID"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

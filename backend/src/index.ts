@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -5,7 +6,14 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 const app = express();
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg({
+  host: "dpg-da105mugekts73fvavl0-a.oregon-postgres.render.com",
+  port: 5432,
+  user: "goyenni_user",
+  password: process.env.DB_PASSWORD,
+  database: "goyenni",
+  ssl: { rejectUnauthorized: false },
+});
 const prisma = new PrismaClient({ adapter });
 const PORT = process.env.PORT || 4000;
 
@@ -52,6 +60,67 @@ app.get("/health", (req, res) => {
 app.get("/candidates", async (req, res) => {
   const candidates = await prisma.candidate.findMany();
   res.json(candidates);
+});
+
+/**
+ * @openapi
+ * /candidates:
+ *   post:
+ *     summary: Create a candidate
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               headline:
+ *                 type: string
+ *               summary:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Candidate created
+ */
+app.post("/candidates", async (req, res) => {
+  const { email, firstName, lastName, headline, summary } = req.body;
+  const candidate = await prisma.candidate.create({
+    data: { email, firstName, lastName, headline, summary },
+  });
+  res.status(201).json(candidate);
+});
+
+/**
+ * @openapi
+ * /candidates/{id}:
+ *   get:
+ *     summary: Get a candidate by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Candidate found
+ *       404:
+ *         description: Candidate not found
+ */
+app.get("/candidates/:id", async (req, res) => {
+  const candidate = await prisma.candidate.findUnique({
+    where: { id: req.params.id },
+  });
+  if (!candidate) {
+    return res.status(404).json({ error: "Candidate not found" });
+  }
+  res.json(candidate);
 });
 
 app.listen(PORT, () => {
