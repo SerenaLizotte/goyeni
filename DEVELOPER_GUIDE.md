@@ -92,3 +92,38 @@ Every new endpoint should be documented with an @openapi JSDoc comment block dir
 - Frontend: Vercel
 - Backend: Render
 - Database: Render PostgreSQL (currently free tier - has a shadow-database permission restriction noted above; upgrading to a paid tier may resolve this)
+
+## Testing (Planned)
+
+Testing has not been built yet, but the approach is decided:
+
+### Unit / Integration Tests
+- Tool: Vitest
+- Scope: backend route handlers and business logic in isolation (e.g. does POST /candidates reject a missing email, does disable correctly set isActive to false, does update 404 on a bad ID)
+- Will run against a test database or mocked Prisma client - never against the real Render production data
+
+### End-to-End / Self-Healing Tests
+- Tool: Playwright
+- Phase 1: API-level tests hitting the real running backend endpoints, automated and repeatable (complements the manual Postman collection)
+- Phase 2: once the frontend has real pages, extend into full UI self-healing tests, using the same self-healing selector/retry approach used in the Netakina test suite
+
+### Suggested build order
+1. Vitest unit tests once Employer/JobPosting endpoints exist (more surface area makes it worth it)
+2. Playwright API tests against the live backend
+3. Playwright UI tests once frontend pages exist - this becomes a second flagship self-healing test suite alongside Netakina's
+
+### Accessibility Testing
+- Tool: axe-core, via @axe-core/playwright
+- Integrates directly into the Playwright E2E suite (no separate tooling needed)
+- Catches WCAG violations automatically as part of normal test runs - missing alt text, poor color contrast, missing ARIA labels, keyboard navigation issues
+
+### Security Testing
+- Dependency scanning: npm audit (built-in, free) plus GitHub Dependabot enabled on the repo, to catch known vulnerable packages automatically
+- API security scanning: OWASP ZAP (free) for automated checks against the running API - SQL injection attempts, auth bypass checks, common attack patterns
+- Input validation: every endpoint should validate/sanitize request bodies before hitting the database (not yet implemented - currently relying on Prisma's type safety alone, which is not sufficient on its own)
+- Error handling: current dev setup returns full stack traces in API error responses (useful for debugging, but must be locked down before any public/production deployment - should return generic error messages in production and log full details server-side only)
+
+### Performance Testing
+- Tool: k6 or Artillery (both free, scriptable)
+- Load-test key endpoints (e.g. GET /candidates, POST /candidates) by simulating concurrent users once there is enough built out to make this meaningful
+- In the meantime, keep an informal eye on response times as features are added
