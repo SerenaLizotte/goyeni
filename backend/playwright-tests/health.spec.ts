@@ -6,6 +6,6 @@ test.describe("Health API", () => {
     expect(response.status()).toBe(200);
 
     const body = await response.json();
-    expect(body).toEqual({ status: "ok" });
+    expect(body).toEqual({ status: "intentionally-broken-playwright-test" });
   });
 });
