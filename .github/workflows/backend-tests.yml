@@ -33,5 +33,25 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Run tests
+      - name: Run Vitest unit/integration tests
         run: npm run test
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start backend server in background
+        run: npx tsx src/index.ts &
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:4000/health --timeout 30000
+
+      - name: Run Playwright API tests
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: backend/playwright-report/
+          retention-days: 7
