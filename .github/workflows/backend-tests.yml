@@ -37,7 +37,7 @@ jobs:
         run: npm run test
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npm exec playwright install --with-deps chromium
 
       - name: Start backend server in background
         run: npx tsx src/index.ts &
@@ -46,7 +46,7 @@ jobs:
         run: npx wait-on http://localhost:4000/health --timeout 30000
 
       - name: Run Playwright API tests
-        run: npx playwright test
+        run: npm run test:playwright
 
       - name: Upload Playwright report
         if: always()
