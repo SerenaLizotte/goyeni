@@ -12,6 +12,9 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -32,6 +35,3 @@ jobs:
 
       - name: Run tests
         run: npm run test
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
