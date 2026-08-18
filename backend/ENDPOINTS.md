@@ -15,7 +15,13 @@ Interactive docs (Swagger): `http://localhost:4000/api-docs`
 - `PATCH /candidates/{id}/enable` — re-activate a disabled candidate
 
 ## Employers
-_Not yet built_
+
+- `GET /employers` — returns all active employers
+- `POST /employers` — create an employer
+- `GET /employers/{id}` — get an employer by ID (returns regardless of active status)
+- `PUT /employers/{id}` — update an employer's details
+- `PATCH /employers/{id}/disable` — soft-delete (sets isActive to false)
+- `PATCH /employers/{id}/enable` — re-activate a disabled employer
 
 ## Job Postings
 _Not yet built_
