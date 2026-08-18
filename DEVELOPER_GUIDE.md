@@ -120,14 +120,19 @@ Unit/integration testing is built and running in CI. Accessibility, security, an
 - Run locally with: npm run test (defined as "vitest run" in package.json)
 - Known limitation: tests currently run against the real Render database, not a dedicated test database or mocked Prisma client, since a separate test database has not been set up yet. Worth revisiting - see Render free-tier notes above.
 
-### End-to-End / Self-Healing Tests
-- Tool: Playwright
-- Phase 1: API-level tests hitting the real running backend endpoints, automated and repeatable (complements the manual Postman collection)
-- Phase 2: once the frontend has real pages, extend into full UI self-healing tests, using the same self-healing selector/retry approach used in the Netakina test suite
+### API Tests (Built) - Playwright
+- Test files live in backend/playwright-tests/ - health.spec.ts, candidates.spec.ts, employers.spec.ts
+- Config: backend/playwright.config.ts - baseURL defaults to http://localhost:4000, overridable via API_BASE_URL env var
+- Run locally with: npm run test:playwright (requires the dev server running separately via npm run dev)
+- Uses test.describe.serial() per resource file, since each CRUD test depends on the id created in the first test - Playwright parallelizes by default, so this is required to keep the lifecycle in order
+- View the HTML report with: npx playwright show-report
+- The exact testing approach (what to assert, in what order, and why) is documented separately in backend/TESTING_PATTERNS.md - read that before adding tests for a new resource
 
-### Suggested build order (remaining)
-1. Playwright API tests against the live backend
-2. Playwright UI tests once frontend pages exist - this becomes a second flagship self-healing test suite alongside Netakina's
+### Planned: UI Self-Healing Tests
+- Tool: Playwright, extended with a self-healing selector/retry agent, once the frontend has real pages to test
+- This is a deliberately different approach from the API tests above: API contracts are structural and should NOT self-heal (a breaking API change is a signal that needs a human decision, not silent adaptation) - see the "Why a fixed pattern, not a self-healing agent" section of TESTING_PATTERNS.md for the full reasoning
+- UI layout/selectors genuinely can shift for reasons unrelated to real regressions (a CSS class rename, reordered DOM), which is where self-healing logic is actually the right tool
+- This becomes a second flagship self-healing test suite alongside the one already built for Netakina - proof that the skill is a repeatable, generalizable capability, not a one-off
 
 ### Accessibility Testing
 - Tool: axe-core, via @axe-core/playwright
@@ -149,9 +154,13 @@ Unit/integration testing is built and running in CI. Accessibility, security, an
 
 ### GitHub Actions (Built)
 - Workflow: .github/workflows/backend-tests.yml
-- Runs the Vitest suite automatically on every pull request targeting main, and on every push to main
-- Requires DATABASE_URL and DB_PASSWORD as GitHub repository secrets (Settings > Secrets and variables > Actions)
+- Runs both the Vitest suite and the Playwright API suite automatically on every pull request targeting main, and on every push to main
+- Requires DATABASE_URL and DB_PASSWORD as GitHub repository secrets (Settings > Secrets and variables > Actions) - both suites run against the real Render database
 - Environment variables must be set at the job level (not just on individual steps) so they are available to every step, including npx prisma generate - this was a real bug we hit and fixed: setting env only on the "Run tests" step caused the earlier "Generate Prisma Client" step to fail with a PrismaConfigEnvError
+- Playwright tests need the server actually running (unlike Vitest, which imports the app in-process) - the workflow starts the server in the background (npx tsx src/index.ts &) then uses wait-on to poll /health until it responds before running tests
+- vitest.config.ts must explicitly exclude playwright-tests/** - by default Vitest's test discovery picks up any *.spec.ts file, which caused it to try (and fail) to run the Playwright spec files, since @playwright/test isn't a valid import under Vitest's runner
+- Playwright must be invoked via an npm script (npm run test:playwright, defined as "playwright test" in package.json), not npx playwright test - npx resolves against a separate global npx cache that may hold a different "playwright" package than the project's local @playwright/test devDependency, causing a "Cannot find module '@playwright/test'" error even though it's correctly installed locally. The same applies to installing browsers: use npm exec playwright install --with-deps chromium, not npx playwright install
+- Double-check that @playwright/test actually appears under devDependencies in package.json after installing - in one session it silently failed to persist to package.json despite the install command reporting success locally, which only surfaced as a "playwright: not found" failure in CI
 
 ### Branch Protection (Built)
 - main is protected: all changes must go through a pull request (Settings > Branches)
