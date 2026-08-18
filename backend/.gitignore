@@ -9,3 +9,5 @@ node_modules
 .windsurf/
 skills-lock.json
 .DS_Store
+playwright-report/
+test-results/
