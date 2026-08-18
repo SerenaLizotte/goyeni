@@ -33,8 +33,14 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Run Vitest unit/integration tests
-        run: npm run test
+      - name: Run Vitest unit/integration tests with coverage
+        run: npm run test:coverage
+
+      - name: Report coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: backend
 
       - name: Install Playwright browsers
         run: npm exec playwright install --with-deps chromium

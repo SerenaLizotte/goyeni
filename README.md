@@ -1,5 +1,7 @@
 # Goyeni
 
+![Backend Tests](https://github.com/SerenaLizotte/goyeni/actions/workflows/backend-tests.yml/badge.svg)
+
 A verified, human-first career and hiring marketplace - no AI matching, no algorithmic gatekeeping. Just real people connecting with real opportunities.
 
 ## Why Goyeni
