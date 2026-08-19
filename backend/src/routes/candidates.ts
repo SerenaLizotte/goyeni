@@ -55,6 +55,34 @@ router.post("/", async (req, res) => {
 
 /**
  * @openapi
+ * /candidates/lookup:
+ *   get:
+ *     summary: Look up a candidate by email (login simulation)
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Candidate found
+ *       404:
+ *         description: No candidate with that email
+ */
+router.get("/lookup", async (req, res) => {
+  const email = req.query.email as string;
+  const candidate = await prisma.candidate.findUnique({
+    where: { email },
+  });
+  if (!candidate) {
+    return res.status(404).json({ error: "No candidate found with that email" });
+  }
+  res.json(candidate);
+});
+
+/**
+ * @openapi
  * /candidates/{id}:
  *   get:
  *     summary: Get a candidate by ID
