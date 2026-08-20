@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import NavHeader from "./components/NavHeader";
+import LandingPage from "./components/LandingPage";
 
 interface Candidate {
   id: string;
@@ -16,6 +17,7 @@ const API_BASE = "http://localhost:4000";
 
 function App() {
   const [loggedInCandidate, setLoggedInCandidate] = useState<Candidate | null>(null);
+  const [showLoginForm, setShowLoginForm] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginFirstName, setLoginFirstName] = useState("");
   const [loginLastName, setLoginLastName] = useState("");
@@ -109,6 +111,15 @@ function App() {
   };
 
   if (!loggedInCandidate) {
+  if (!showLoginForm) {
+    return (
+      <LandingPage
+          onSelectCandidate={() => setShowLoginForm(true)}
+          onSelectRecruiter={() => {}}
+        />
+      );
+    }
+
     return (
       <div className="app-container">
         <h1>Goyeni</h1>
