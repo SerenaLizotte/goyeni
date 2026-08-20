@@ -185,3 +185,17 @@ Unit/integration testing is built and running in CI. Accessibility, security, an
 3. Open a pull request on GitHub - the Backend Tests check runs automatically
 4. Once the check passes, merge the PR (with 0 required approvals currently, since solo)
 5. Clean up locally: git checkout main && git pull && git branch -d type/short-description
+
+## Authentication (Planned)
+
+Currently, "login" is a simplified email-lookup flow with no real password or session verification - anyone who knows or guesses a candidate's/employer's email can access that account. This was a deliberate simplification to move fast on core CRUD and UI work, but it is a real security gap now that the app is live and publicly reachable.
+
+### Plan
+- Build real authentication ourselves: bcrypt password hashing, JWT-based sessions, verified on protected routes
+- Add a password field (hashed) to Candidate and Employer models
+- New endpoints: POST /candidates/register, POST /candidates/login (and the Employer equivalents)
+- Update frontend login/signup forms to collect and submit a real password
+- Full test coverage (Vitest, Postman, Playwright) following existing TESTING_PATTERNS.md
+
+### Future migration
+Once Goyeni has real scale, revisit migrating to an enterprise IAM provider (e.g. Ping Identity) for SSO, MFA, and centralized identity management. Ping Identity has no meaningful free tier and is built for workforce/enterprise identity management, not a natural fit for an early-stage consumer app - building in-house now, with a clear migration path later, is the right sequencing.
