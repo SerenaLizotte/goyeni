@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import NavHeader from "./components/NavHeader";
 
 interface Candidate {
   id: string;
@@ -162,6 +163,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <NavHeader initials={`${profileFirstName[0] || ""}${profileLastName[0] || ""}`} />
       <h1>My Profile</h1>
       <p data-testid="welcome-message">
         Logged in as <span data-testid="profile-email">{loggedInCandidate.email}</span>

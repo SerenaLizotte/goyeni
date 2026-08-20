@@ -1,58 +1,16 @@
-import express from "express";
-import { PrismaClient } from "@prisma/client";
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-const app = express();
-const prisma = new PrismaClient();
-const PORT = process.env.PORT || 4000;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f7f7f5;
+  color: #1a1a1a;
+  line-height: 1.5;
+}
 
-app.use(express.json());
-
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Goyeni API",
-      version: "1.0.0",
-      description: "API documentation for the Goyeni platform",
-    },
-    servers: [{ url: `http://localhost:${PORT}` }],
-  },
-  apis: ["./src/index.ts"], // we'll expand this as we add more route files
-};
-
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-/**
- * @openapi
- * /health:
- *   get:
- *     summary: Health check
- *     responses:
- *       200:
- *         description: Server is running
- */
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
-});
-
-/**
- * @openapi
- * /candidates:
- *   get:
- *     summary: Get all candidates
- *     responses:
- *       200:
- *         description: List of candidates
- */
-app.get("/candidates", async (req, res) => {
-  const candidates = await prisma.candidate.findMany();
-  res.json(candidates);
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Swagger docs at http://localhost:${PORT}/api-docs`);
-});
+#root {
+  min-height: 100vh;
+}
