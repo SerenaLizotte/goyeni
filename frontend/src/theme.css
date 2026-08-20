@@ -1,0 +1,60 @@
+:root {
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-bg-light: #eff6ff;
+  --color-border: #e5e5e5;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #555;
+  --color-text-muted: #777;
+
+  --radius: 6px;
+  --radius-lg: 10px;
+
+  --spacing-xs: 0.4rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  --font-size-sm: 0.875rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+}
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: white;
+  padding: var(--spacing-lg);
+}
+
+.button-primary {
+  padding: var(--spacing-xs) var(--spacing-lg);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: white;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+
+.button-primary:hover {
+  opacity: 0.9;
+}
+
+.button-secondary {
+  padding: var(--spacing-xs) var(--spacing-lg);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background-color: white;
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+}

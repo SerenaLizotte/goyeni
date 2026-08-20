@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./App.css";
 import NavHeader from "./components/NavHeader";
+import LandingPage from "./components/LandingPage";
+import BackButton from "./components/BackButton";
+import Breadcrumbs from "./components/Breadcrumbs";
 
 interface Candidate {
   id: string;
@@ -16,6 +19,7 @@ const API_BASE = "http://localhost:4000";
 
 function App() {
   const [loggedInCandidate, setLoggedInCandidate] = useState<Candidate | null>(null);
+  const [showLoginForm, setShowLoginForm] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginFirstName, setLoginFirstName] = useState("");
   const [loginLastName, setLoginLastName] = useState("");
@@ -109,8 +113,18 @@ function App() {
   };
 
   if (!loggedInCandidate) {
+    if (!showLoginForm) {
+      return (
+        <LandingPage
+          onSelectCandidate={() => setShowLoginForm(true)}
+          onSelectRecruiter={() => {}}
+        />
+      );
+    }
+
     return (
       <div className="app-container">
+        <Breadcrumbs path={["Home", "Log In"]} />
         <h1>Goyeni</h1>
         <section aria-label="Login">
           <h2>Log In</h2>
@@ -147,9 +161,12 @@ function App() {
                 onChange={(e) => setLoginLastName(e.target.value)}
               />
             </div>
-            <button type="submit" data-testid="login-button">
-              Log In
-            </button>
+            <div className="form-actions">
+              <BackButton onClick={() => setShowLoginForm(false)} />
+              <button type="submit" data-testid="login-button">
+                Log In
+              </button>
+            </div>
           </form>
           {error && (
             <p role="alert" data-testid="error-message">
@@ -163,6 +180,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <Breadcrumbs path={["Home", "My Profile"]} />
       <NavHeader initials={`${profileFirstName[0] || ""}${profileLastName[0] || ""}`} />
       <h1>My Profile</h1>
       <p data-testid="welcome-message">
@@ -214,9 +232,12 @@ function App() {
             onChange={(e) => setProfileSummary(e.target.value)}
           />
         </div>
-        <button type="submit" data-testid="save-profile-button">
-          Save Profile
-        </button>
+        <div className="form-actions">
+          <BackButton onClick={handleLogout} />
+          <button type="submit" data-testid="save-profile-button">
+            Save Profile
+          </button>
+        </div>
       </form>
 
       {saveMessage && <p data-testid="save-message">{saveMessage}</p>}
