@@ -1,0 +1,15 @@
+title: Goyeni Devlog
+email: serena.lizotte@gmail.com
+description: >-
+  A build log for Goyeni, a human-first career and hiring marketplace.
+  Documenting the real problems, bugs, and decisions made while building
+  it in public, using AI-assisted development tools.
+baseurl: "/goyeni"
+url: "https://serenalizotte.github.io"
+github_username: SerenaLizotte
+
+port: 4001
+
+theme: minima
+plugins:
+  - jekyll-feed
