@@ -4,6 +4,8 @@
 
 A verified, human-first career and hiring marketplace - no AI matching, no algorithmic gatekeeping. Just real people connecting with real opportunities.
 
+[![Goyeni Devlog](docs-assets/devlog-preview.png)](https://serenalizotte.github.io/goyeni/)
+
 ## Why Goyeni
 
 Most modern hiring platforms lean on AI to screen, rank, and match candidates. Goyeni takes the opposite approach: every match, every review, every step of the process is human-driven. "Yeni" is Turkish for "new" - this is a new take on hiring, built deliberately without AI in the product experience itself.
