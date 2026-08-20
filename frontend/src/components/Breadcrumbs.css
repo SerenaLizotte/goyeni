@@ -1,0 +1,15 @@
+.breadcrumbs {
+  font-size: 0.8125rem;
+  color: #777;
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-segment:last-child {
+  color: #333;
+  font-weight: 500;
+}
+
+.breadcrumb-separator {
+  margin: 0 0.4rem;
+  color: #ccc;
+}
