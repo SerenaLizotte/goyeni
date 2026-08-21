@@ -1,11 +1,19 @@
 :root {
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-bg-light: #eff6ff;
-  --color-border: #e5e5e5;
-  --color-text: #1a1a1a;
-  --color-text-secondary: #555;
-  --color-text-muted: #777;
+  --color-background: #F6F5EE;
+  --color-text: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #6B7280;
+  --color-border: #E5E7EB;
+
+  --color-candidate: #3B82F6;
+  --color-recruiter: #0D9488;
+  --color-card-fill: #82C4C3;
+  --color-card-text: #1E3A8A;
+  --color-accent-banner: #2563EB;
+
+  --color-primary: #3B82F6;
+  --color-primary-hover: #2563EB;
+  --color-bg-light: #EFF6FF;
 
   --radius: 6px;
   --radius-lg: 10px;
@@ -20,41 +28,4 @@
   --font-size-base: 0.9375rem;
   --font-size-lg: 1.125rem;
   --font-size-xl: 1.5rem;
-}
-
-.card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background-color: white;
-  padding: var(--spacing-lg);
-}
-
-.button-primary {
-  padding: var(--spacing-xs) var(--spacing-lg);
-  border-radius: var(--radius);
-  border: 1px solid var(--color-primary);
-  background-color: var(--color-primary);
-  color: white;
-  font-size: var(--font-size-base);
-  cursor: pointer;
-}
-
-.button-primary:hover {
-  opacity: 0.9;
-}
-
-.button-secondary {
-  padding: var(--spacing-xs) var(--spacing-lg);
-  border-radius: var(--radius);
-  border: 1px solid var(--color-border);
-  background-color: white;
-  color: var(--color-text);
-  font-size: var(--font-size-base);
-  cursor: pointer;
-}
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: var(--spacing-lg);
 }
