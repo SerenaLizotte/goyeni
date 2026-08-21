@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import NavHeader from "./components/NavHeader";
+import AppNav from "./components/AppNav";
 import LandingPage from "./components/LandingPage";
 import BackButton from "./components/BackButton";
 import Breadcrumbs from "./components/Breadcrumbs";
@@ -112,18 +112,32 @@ function App() {
     setSaveMessage(null);
   };
 
+  const initials = `${profileFirstName[0] || ""}${profileLastName[0] || ""}`;
+
   if (!loggedInCandidate) {
     if (!showLoginForm) {
       return (
-        <LandingPage
-          onSelectCandidate={() => setShowLoginForm(true)}
-          onSelectRecruiter={() => {}}
-        />
+        <div className="app-container">
+          <AppNav
+            isLoggedIn={false}
+            onLoginClick={() => setShowLoginForm(true)}
+            onLogoutClick={handleLogout}
+          />
+          <LandingPage
+            onSelectCandidate={() => setShowLoginForm(true)}
+            onSelectRecruiter={() => {}}
+          />
+        </div>
       );
     }
 
     return (
       <div className="app-container">
+        <AppNav
+          isLoggedIn={false}
+          onLoginClick={() => setShowLoginForm(true)}
+          onLogoutClick={handleLogout}
+        />
         <Breadcrumbs path={["Home", "Log In"]} />
         <h1>Goyeni</h1>
         <section aria-label="Login">
@@ -163,7 +177,7 @@ function App() {
             </div>
             <div className="form-actions">
               <BackButton onClick={() => setShowLoginForm(false)} />
-              <button type="submit" data-testid="login-button">
+              <button type="submit" className="form-submit-button" data-testid="login-button">
                 Log In
               </button>
             </div>
@@ -180,15 +194,17 @@ function App() {
 
   return (
     <div className="app-container">
+      <AppNav
+        isLoggedIn={true}
+        initials={initials}
+        onLoginClick={() => setShowLoginForm(true)}
+        onLogoutClick={handleLogout}
+      />
       <Breadcrumbs path={["Home", "My Profile"]} />
-      <NavHeader initials={`${profileFirstName[0] || ""}${profileLastName[0] || ""}`} />
       <h1>My Profile</h1>
       <p data-testid="welcome-message">
         Logged in as <span data-testid="profile-email">{loggedInCandidate.email}</span>
       </p>
-      <button onClick={handleLogout} data-testid="logout-button">
-        Log Out
-      </button>
 
       <form onSubmit={handleProfileSave} data-testid="profile-form">
         <div>
@@ -234,7 +250,7 @@ function App() {
         </div>
         <div className="form-actions">
           <BackButton onClick={handleLogout} />
-          <button type="submit" data-testid="save-profile-button">
+          <button type="submit" className="form-submit-button" data-testid="save-profile-button">
             Save Profile
           </button>
         </div>

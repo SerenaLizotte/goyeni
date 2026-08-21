@@ -1,4 +1,3 @@
-import LandingNav from "./LandingNav";
 import LandingHero from "./LandingHero";
 import RoleSelectionCards from "./RoleSelectionCards";
 import TrustBar from "./TrustBar";
@@ -12,7 +11,6 @@ interface LandingPageProps {
 function LandingPage({ onSelectCandidate, onSelectRecruiter }: LandingPageProps) {
   return (
     <div className="landing-page">
-      <LandingNav />
       <LandingHero />
       <RoleSelectionCards
         onSelectCandidate={onSelectCandidate}

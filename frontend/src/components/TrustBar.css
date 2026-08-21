@@ -1,15 +1,18 @@
 .trust-bar {
-  border-top: 1px solid #e5e5e5;
-  padding: 2rem 1rem;
+  padding: var(--spacing-xl) var(--spacing-md);
   text-align: center;
-  margin-top: 2rem;
+  margin-top: var(--spacing-xl);
+  background-color: var(--color-background);
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  width: 100vw;
 }
 
 .trust-bar-title {
-  font-size: 0.9375rem;
+  font-size: var(--font-size-base);
   font-weight: 600;
-  color: #333;
-  margin-bottom: 1rem;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -18,14 +21,14 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--spacing-sm);
 }
 
 .trust-badge {
-  font-size: 0.8125rem;
-  padding: 0.4rem 0.9rem;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
   border-radius: 999px;
-  background-color: #eff6ff;
-  color: #2563eb;
+  background-color: white;
+  color: var(--color-card-text);
   font-weight: 500;
 }

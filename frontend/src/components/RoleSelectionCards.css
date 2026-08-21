@@ -1,7 +1,7 @@
 .role-cards {
   display: flex;
-  gap: 1.5rem;
-  margin: 2.5rem 0;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
 }
 
 @media (max-width: 640px) {
@@ -10,32 +10,88 @@
   }
 }
 
-.role-card {
+.role-column {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 2rem 1.5rem;
-  border: 1px solid #d5d5d5;
-  border-radius: 10px;
+}
+
+.role-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   background-color: white;
   cursor: pointer;
   font-family: inherit;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.role-card:hover {
-  border-color: #2563eb;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+.role-card--candidate:hover {
+  border-color: var(--color-candidate);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.role-card--recruiter:hover {
+  border-color: var(--color-recruiter);
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.15);
 }
 
 .role-card-label {
-  font-size: 1.125rem;
+  font-size: var(--font-size-lg);
   font-weight: 500;
+  color: var(--color-text);
 }
 
 .role-card-action {
-  font-size: 0.9375rem;
-  color: #2563eb;
+  font-size: var(--font-size-base);
+}
+
+.role-card--candidate .role-card-action {
+  color: var(--color-card-text);
+}
+
+.role-card--recruiter .role-card-action {
+  color: var(--color-recruiter);
+}
+
+.role-connector {
+  width: 2px;
+  height: var(--spacing-lg);
+  background-color: var(--color-border);
+}
+
+.feature-box {
+  width: 100%;
+  padding: var(--spacing-md);
+  border-radius: var(--radius);
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.feature-box--candidate {
+  background-color: var(--color-bg-light);
+}
+
+.feature-box--recruiter {
+  background-color: #F0FDFA;
+}
+
+.feature-box-title {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-card-text);
+}
+
+.feature-box-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
