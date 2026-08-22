@@ -7,7 +7,7 @@ function LandingRoute() {
   return (
     <LandingPage
       onSelectCandidate={() => navigate("/login")}
-      onSelectRecruiter={() => {}}
+      onSelectRecruiter={() => navigate("/recruiter")}
     />
   );
 }

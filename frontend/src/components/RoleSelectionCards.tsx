@@ -21,9 +21,7 @@ function RoleSelectionCards({
           <span className="role-card-action">Explore Verified Roles &rarr;</span>
         </button>
         <div className="role-connector role-connector--candidate" />
-        <a
-        
-          href="#"
+        <div
           className="feature-box feature-box--candidate"
           data-testid="candidate-feature-link"
         >
@@ -31,7 +29,10 @@ function RoleSelectionCards({
           <span className="feature-box-desc">
             Direct application to hiring managers.
           </span>
-        </a>
+          <span className="feature-box-tooltip feature-box-tooltip--left">
+            Text Coming Soon
+          </span>
+        </div>
       </div>
 
       <div className="role-column">
@@ -44,9 +45,7 @@ function RoleSelectionCards({
           <span className="role-card-action">Find Verified Talent &rarr;</span>
         </button>
         <div className="role-connector role-connector--recruiter" />
-        <a
-        
-          href="#"
+        <div
           className="feature-box feature-box--recruiter"
           data-testid="recruiter-feature-link"
         >
@@ -54,7 +53,10 @@ function RoleSelectionCards({
           <span className="feature-box-desc">
             Build real relationships with real human connection.
           </span>
-        </a>
+          <span className="feature-box-tooltip feature-box-tooltip--right">
+            Text Coming Soon
+          </span>
+        </div>
       </div>
     </div>
   );

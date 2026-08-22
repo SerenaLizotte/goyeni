@@ -31,4 +31,26 @@
   background-color: white;
   color: var(--color-card-text);
   font-weight: 500;
+  position: relative;
+  cursor: default;
+}
+.trust-badge-tooltip {
+  position: absolute;
+  top: calc(100% + var(--spacing-xs));
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text);
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.trust-badge:hover .trust-badge-tooltip {
+  opacity: 1;
 }

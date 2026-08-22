@@ -5,13 +5,12 @@ import "../App.css";
 
 function Layout() {
   const navigate = useNavigate();
-  const { isLoggedIn, initials, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <div className="app-container">
       <AppNav
         isLoggedIn={isLoggedIn}
-        initials={initials}
         onLoginClick={() => navigate("/login")}
         onLogoutClick={() => {
           logout();
