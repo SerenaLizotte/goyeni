@@ -1,0 +1,21 @@
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  min-height: calc(100vh - 220px);
+  text-align: center;
+}
+
+.coming-soon-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.coming-soon-message {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}

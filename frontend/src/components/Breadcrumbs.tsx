@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import "./Breadcrumbs.css";
 
 interface BreadcrumbsProps {
@@ -10,7 +11,13 @@ function Breadcrumbs({ path }: BreadcrumbsProps) {
       {path.map((segment, index) => (
         <span key={index} className="breadcrumb-segment">
           {index > 0 && <span className="breadcrumb-separator">/</span>}
-          {segment}
+          {index === 0 ? (
+            <Link to="/" className="breadcrumb-link">
+              {segment}
+            </Link>
+          ) : (
+            segment
+          )}
         </span>
       ))}
     </nav>

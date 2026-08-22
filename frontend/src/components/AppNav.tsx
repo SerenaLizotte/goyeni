@@ -1,13 +1,13 @@
+import { Link } from "react-router";
 import "./AppNav.css";
 
 interface AppNavProps {
   isLoggedIn: boolean;
-  initials?: string;
   onLoginClick: () => void;
   onLogoutClick: () => void;
 }
 
-function AppNav({ isLoggedIn, initials, onLoginClick, onLogoutClick }: AppNavProps) {
+function AppNav({ isLoggedIn, onLoginClick, onLogoutClick }: AppNavProps) {
   return (
     <div className="app-nav">
       <div className="app-nav-logo">
@@ -18,21 +18,21 @@ function AppNav({ isLoggedIn, initials, onLoginClick, onLogoutClick }: AppNavPro
         <a href="#" className="app-nav-link">
           Candidate
         </a>
-        <a href="#" className="app-nav-link">
+        <Link to="/recruiter" className="app-nav-link">
           Recruiter
-        </a>
-        <a href="#" className="app-nav-link">
+        </Link>
+        <Link to="/about" className="app-nav-link">
           About
-        </a>
-        <a href="#" className="app-nav-link">
+        </Link>
+        <Link to="/contact" className="app-nav-link">
           Contact
-        </a>
+        </Link>
       </div>
       <div className="app-nav-actions">
-        {isLoggedIn && initials && (
-          <span className="app-nav-initials" data-testid="nav-avatar">
-            {initials}
-          </span>
+        {isLoggedIn && (
+          <Link to="/account" className="app-nav-initials" data-testid="nav-avatar">
+            Account
+          </Link>
         )}
         {isLoggedIn ? (
           <button

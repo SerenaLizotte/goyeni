@@ -9,8 +9,6 @@ function LoginRoute() {
   const { login } = useAuth();
 
   const [loginEmail, setLoginEmail] = useState("");
-  const [loginFirstName, setLoginFirstName] = useState("");
-  const [loginLastName, setLoginLastName] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -18,8 +16,8 @@ function LoginRoute() {
     setError(null);
 
     try {
-      await login(loginEmail, loginFirstName, loginLastName);
-      navigate("/profile");
+      await login(loginEmail, "", "");
+      navigate("/dashboard");
     } catch (err) {
       setError("Could not log in. Is the backend running?");
     }
@@ -45,24 +43,15 @@ function LoginRoute() {
             />
           </div>
           <div>
-            <label htmlFor="login-firstname-input">First Name (if new)</label>
+            <label htmlFor="login-password-input">Password</label>
             <input
-              id="login-firstname-input"
-              data-testid="login-firstname-input"
-              type="text"
-              value={loginFirstName}
-              onChange={(e) => setLoginFirstName(e.target.value)}
+              id="login-password-input"
+              data-testid="login-password-input"
+              type="password"
+              value="••••••••"
+              disabled
             />
-          </div>
-          <div>
-            <label htmlFor="login-lastname-input">Last Name (if new)</label>
-            <input
-              id="login-lastname-input"
-              data-testid="login-lastname-input"
-              type="text"
-              value={loginLastName}
-              onChange={(e) => setLoginLastName(e.target.value)}
-            />
+            <span className="account-password-note">Coming soon</span>
           </div>
           <div className="form-actions">
             <BackButton onClick={() => navigate("/")} />

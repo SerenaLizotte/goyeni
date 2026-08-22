@@ -1,0 +1,59 @@
+.dashboard-shortcuts {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin: var(--spacing-lg) 0;
+}
+
+.dashboard-shortcut {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius);
+  background-color: white;
+  color: var(--color-card-text);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+}
+
+.dashboard-shortcut--disabled {
+  color: var(--color-text-muted);
+  cursor: default;
+}
+
+.dashboard-shortcut--disabled em {
+  font-style: normal;
+  font-size: 0.75rem;
+  margin-left: var(--spacing-xs);
+}
+
+.job-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.job-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: white;
+}
+
+.job-card-title {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.job-card-company {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.job-card-location {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
