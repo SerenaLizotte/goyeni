@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import { useAuth } from "../AuthContext";
 import Breadcrumbs from "../components/Breadcrumbs";
 import BackButton from "../components/BackButton";
@@ -7,7 +7,7 @@ import BackButton from "../components/BackButton";
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:4000";
 
 function AccountRoute() {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const { candidate, token, setCandidate } = useAuth();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -236,7 +236,7 @@ function AccountRoute() {
               <p role="alert" data-testid="password-error-message">
                 {passwordError}
               </p>
-            )}
+            )} 
           </section>
         </>
       )}
