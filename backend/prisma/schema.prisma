@@ -7,19 +7,19 @@ datasource db {
 }
 
 model Candidate {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  firstName String
-  lastName  String
-  headline  String?
-  summary   String?
-  isActive  Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  headline     String?
+  summary      String?
+  isActive     Boolean @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  answers   Answer[]
+  answers      Answer[]
 }
-
 model Employer {
   id          String   @id @default(uuid())
   email       String   @unique
