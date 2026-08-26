@@ -68,3 +68,70 @@
   color: var(--color-text-muted);
   margin-top: 0.25rem;
 }
+.auth-mode-toggle {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.auth-mode-toggle button {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: white;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.auth-mode-toggle button.auth-mode-active {
+  background-color: var(--color-card-text);
+  color: white;
+  border-color: var(--color-card-text);
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.account-edit-button {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: white;
+  color: var(--color-card-text);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.account-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.account-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--color-text-muted);
+}
+
+.account-field-label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.account-field-value {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+}
+
+.account-password-section {
+  margin-top: var(--spacing-xl);
+}

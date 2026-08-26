@@ -1,25 +1,65 @@
 import { test, expect } from "@playwright/test";
 
 let candidateId: string;
+let authToken: string;
 
 test.describe.serial("Candidates API", () => {
-  test("creates a candidate", async ({ request }) => {
-    const response = await request.post("/candidates", {
+  test("registers a candidate", async ({ request }) => {
+    const response = await request.post("/candidates/register", {
       data: {
         email: `pw-test-${Date.now()}@example.com`,
+        password: "TestPassword123!",
         firstName: "Playwright",
         lastName: "Test",
-        headline: "Automated QA",
-        summary: "Created by Playwright API test.",
       },
     });
 
     expect(response.status()).toBe(201);
     const body = await response.json();
-    expect(body.id).toBeDefined();
-    expect(body.isActive).toBe(true);
+    expect(body.candidate.id).toBeDefined();
+    expect(body.candidate.isActive).toBe(true);
+    expect(body.token).toBeDefined();
 
-    candidateId = body.id;
+    candidateId = body.candidate.id;
+    authToken = body.token;
+  });
+
+  test("logs in with the correct password", async ({ request }) => {
+    const email = `pw-login-${Date.now()}@example.com`;
+    await request.post("/candidates/register", {
+      data: {
+        email,
+        password: "TestPassword123!",
+        firstName: "Login",
+        lastName: "Test",
+      },
+    });
+
+    const response = await request.post("/candidates/login", {
+      data: { email, password: "TestPassword123!" },
+    });
+
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.token).toBeDefined();
+  });
+
+  test("rejects login with the wrong password", async ({ request }) => {
+    const email = `pw-wrongpass-${Date.now()}@example.com`;
+    await request.post("/candidates/register", {
+      data: {
+        email,
+        password: "TestPassword123!",
+        firstName: "Wrong",
+        lastName: "Pass",
+      },
+    });
+
+    const response = await request.post("/candidates/login", {
+      data: { email, password: "IncorrectPassword" },
+    });
+
+    expect(response.status()).toBe(401);
   });
 
   test("gets all active candidates", async ({ request }) => {
@@ -41,8 +81,23 @@ test.describe.serial("Candidates API", () => {
     expect(response.status()).toBe(404);
   });
 
-  test("updates a candidate", async ({ request }) => {
+  test("rejects an update without an auth token", async ({ request }) => {
     const response = await request.put(`/candidates/${candidateId}`, {
+      data: {
+        email: `pw-updated-${Date.now()}@example.com`,
+        firstName: "Updated",
+        lastName: "Name",
+        headline: "Senior Automated QA",
+        summary: "Updated by Playwright.",
+      },
+    });
+
+    expect(response.status()).toBe(401);
+  });
+
+  test("updates a candidate with a valid auth token", async ({ request }) => {
+    const response = await request.put(`/candidates/${candidateId}`, {
+      headers: { Authorization: `Bearer ${authToken}` },
       data: {
         email: `pw-updated-${Date.now()}@example.com`,
         firstName: "Updated",
