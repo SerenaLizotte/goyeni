@@ -38,9 +38,10 @@ This repo uses the SerenaLizotte GitHub account (separate from the sldakin accou
 
        DATABASE_URL="postgresql://USER:PASSWORD@HOST/DBNAME"
        DB_PASSWORD="your-db-password-here"
+       JWT_SECRET="generate-with-openssl-rand-base64-32"
        PORT=4000
 
-   Note: both DATABASE_URL and DB_PASSWORD are currently required. DATABASE_URL is used by the Prisma CLI (migrate/push/generate). DB_PASSWORD is used directly by the app itself, since passing the full connection string to the PrismaPg adapter caused persistent authentication errors with our Render Postgres instance. The adapter is configured with individual connection fields (host, user, password, database) instead of a single connection string - see backend/src/index.ts.
+   Note: DATABASE_URL, DB_PASSWORD, and JWT_SECRET are all currently required. DATABASE_URL is used by the Prisma CLI (migrate/push/generate). DB_PASSWORD is used directly by the app itself, since passing the full connection string to the PrismaPg adapter caused persistent authentication errors with our Render Postgres instance. The adapter is configured with individual connection fields (host, user, password, database) instead of a single connection string - see backend/src/index.ts. JWT_SECRET signs and verifies candidate auth tokens - generate one with `openssl rand -base64 32` and use a different value in each environment (local, CI, production).
 
 4. Sync the Prisma schema to the database:
 
@@ -62,6 +63,7 @@ This repo uses the SerenaLizotte GitHub account (separate from the sldakin accou
 - ts-node-dev is not compatible with newer TypeScript versions and is no longer maintained. This project uses tsx instead (npm run dev runs tsx watch src/index.ts).
 - Our own Express server code does not automatically load .env - only the Prisma CLI does that. The app itself needs import "dotenv/config"; as the very first line in src/index.ts.
 - Render Postgres requires SSL. The PrismaPg adapter needs ssl: { rejectUnauthorized: false } passed explicitly.
+- verbatimModuleSyntax in tsconfig.json conflicts with "type": "commonjs" in package.json - running npx tsc --noEmit shows 63 pre-existing errors across every backend file (not caused by any specific change) because nothing in the build/test pipeline actually runs a full type-check. This was turned off (verbatimModuleSyntax: false) since it caught nothing real and only added editor noise.
 
 ## Postman
 
@@ -155,7 +157,7 @@ Unit/integration testing is built and running in CI. Accessibility, security, an
 ### GitHub Actions (Built)
 - Workflow: .github/workflows/backend-tests.yml
 - Runs both the Vitest suite and the Playwright API suite automatically on every pull request targeting main, and on every push to main
-- Requires DATABASE_URL and DB_PASSWORD as GitHub repository secrets (Settings > Secrets and variables > Actions) - both suites run against the real Render database
+- Requires DATABASE_URL, DB_PASSWORD, and JWT_SECRET as GitHub repository secrets (Settings > Secrets and variables > Actions) - both suites run against the real Render database
 - Environment variables must be set at the job level (not just on individual steps) so they are available to every step, including npx prisma generate - this was a real bug we hit and fixed: setting env only on the "Run tests" step caused the earlier "Generate Prisma Client" step to fail with a PrismaConfigEnvError
 - Playwright tests need the server actually running (unlike Vitest, which imports the app in-process) - the workflow starts the server in the background (npx tsx src/index.ts &) then uses wait-on to poll /health until it responds before running tests
 - vitest.config.ts must explicitly exclude playwright-tests/** - by default Vitest's test discovery picks up any *.spec.ts file, which caused it to try (and fail) to run the Playwright spec files, since @playwright/test isn't a valid import under Vitest's runner
@@ -186,16 +188,18 @@ Unit/integration testing is built and running in CI. Accessibility, security, an
 4. Once the check passes, merge the PR (with 0 required approvals currently, since solo)
 5. Clean up locally: git checkout main && git pull && git branch -d type/short-description
 
-## Authentication (Planned)
+## Authentication (Built)
 
-Currently, "login" is a simplified email-lookup flow with no real password or session verification - anyone who knows or guesses a candidate's/employer's email can access that account. This was a deliberate simplification to move fast on core CRUD and UI work, but it is a real security gap now that the app is live and publicly reachable.
+Real authentication is live for candidates: bcrypt-style password hashing (via bcryptjs), JWT-based sessions, verified on protected routes.
 
-### Plan
-- Build real authentication ourselves: bcrypt password hashing, JWT-based sessions, verified on protected routes
-- Add a password field (hashed) to Candidate and Employer models
-- New endpoints: POST /candidates/register, POST /candidates/login (and the Employer equivalents)
-- Update frontend login/signup forms to collect and submit a real password
-- Full test coverage (Vitest, Postman, Playwright) following existing TESTING_PATTERNS.md
+- Password field (`passwordHash`, required) added to the Candidate model
+- `POST /candidates/register` and `POST /candidates/login` replace the old email-lookup flow
+- `PUT /candidates/{id}` and `PUT /candidates/{id}/password` require a valid `Authorization: Bearer <token>` header, and check that the token's candidate ID matches the record being modified
+- Login and register both return a candidate object (with `passwordHash` stripped out) and a token
+- Frontend: the login page is now a Log In / Sign Up toggle; the Account page has a real change-password form requiring the current password
+- Used bcryptjs instead of bcrypt - bcrypt needs a native compile step (node-gyp-build) that can silently fail to run on install, which is a real risk on a build server like Render. bcryptjs is pure JavaScript with the same API, nothing to compile.
+- JWT_SECRET is required in all three environments: local .env, GitHub Actions secrets, and Render's environment variables. Missing it in any one causes login to fail (500 error) only in that environment - this cost real debugging time since local worked fine while CI failed.
+- Employer authentication is not yet built - employers still use the old pattern. Same approach should be applied when that work is picked up.
 
 ### Future migration
 Once Goyeni has real scale, revisit migrating to an enterprise IAM provider (e.g. Ping Identity) for SSO, MFA, and centralized identity management. Ping Identity has no meaningful free tier and is built for workforce/enterprise identity management, not a natural fit for an early-stage consumer app - building in-house now, with a clear migration path later, is the right sequencing.

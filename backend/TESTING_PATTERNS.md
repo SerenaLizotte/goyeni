@@ -17,6 +17,24 @@ Self-healing logic is reserved for UI testing (see below), where selectors and l
 
 For any resource (e.g. Candidate, Employer, and future resources like JobPosting):
 
+## Auth-Protected Resources (Candidate, and any future resource requiring login)
+
+Resources with real authentication (currently: Candidate) deviate from the plain 8-step pattern above in two ways:
+
+### Register replaces Create
+- POST to /register (not the bare collection endpoint) with email, password, and any other required fields
+- Assert status code 201
+- Assert the response includes both a candidate object (with a generated id) and a token
+- Store both the candidate id and the token for use in subsequent tests
+
+### Login must be tested explicitly
+- POST to /login with a valid email/password - assert 200 and a token in the response
+- POST to /login with a wrong password - assert 401 (the API deliberately returns the same error whether the email doesn't exist or the password is wrong, so only test the wrong-password case explicitly, not "wrong email" as a separate scenario)
+
+### Update and other protected routes require the token
+- Any request to a route that requires authentication must include Authorization: Bearer <token>, using the token captured at register/login
+- Also test the unauthenticated case: the same request with no Authorization header should return 401, not succeed or silently skip validation
+
 ### 1. Create
 - POST the resource with all required fields
 - Assert status code 201
