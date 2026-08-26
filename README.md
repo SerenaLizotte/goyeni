@@ -1,10 +1,21 @@
 # Goyeni
 
+<table>
+<tr>
+<td>
+
 [![Backend Tests](https://github.com/SerenaLizotte/goyeni/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/SerenaLizotte/goyeni/actions/workflows/backend-tests.yml)
 
-A verified, human-first career and hiring marketplace - no AI matching, no algorithmic gatekeeping. Just real people connecting with real opportunities.
+</td>
+<td align="right">
 
-[![Goyeni Devlog](docs-assets/devlog-preview.png)](https://serenalizotte.github.io/goyeni/)
+[![GoYeni DevBlog](https://img.shields.io/badge/GoYeni%20DevBlog-333333)](https://serenalizotte.github.io/goyeni/)
+
+</td>
+</tr>
+</table>
+
+A verified, human-first career and hiring marketplace - no AI matching, no algorithmic gatekeeping. Just real people connecting with real opportunities.
 
 ## Why Goyeni
 

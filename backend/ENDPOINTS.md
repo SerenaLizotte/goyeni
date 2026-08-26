@@ -7,10 +7,12 @@ Interactive docs (Swagger): `http://localhost:4000/api-docs`
 - `GET /health` — returns `{ status: "ok" }`, confirms server is running
 
 ## Candidates
+- `POST /candidates/register` — register a new candidate with email, password, first/last name; returns the candidate and a JWT token
+- `POST /candidates/login` — log in with email and password; returns the candidate and a JWT token
 - `GET /candidates` — returns all active candidates
-- `POST /candidates` — create a candidate
 - `GET /candidates/{id}` — get a candidate by ID (returns regardless of active status)
-- `PUT /candidates/{id}` — update a candidate's details
+- `PUT /candidates/{id}` — update a candidate's details (requires `Authorization: Bearer <token>`; candidates can only update their own record)
+- `PUT /candidates/{id}/password` — change password, requires current password (requires `Authorization: Bearer <token>`)
 - `PATCH /candidates/{id}/disable` — soft-delete (sets isActive to false)
 - `PATCH /candidates/{id}/enable` — re-activate a disabled candidate
 
