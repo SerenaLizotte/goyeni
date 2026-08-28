@@ -64,6 +64,7 @@ This repo uses the SerenaLizotte GitHub account (separate from the sldakin accou
 - Our own Express server code does not automatically load .env - only the Prisma CLI does that. The app itself needs import "dotenv/config"; as the very first line in src/index.ts.
 - Render Postgres requires SSL. The PrismaPg adapter needs ssl: { rejectUnauthorized: false } passed explicitly.
 - verbatimModuleSyntax in tsconfig.json conflicts with "type": "commonjs" in package.json - running npx tsc --noEmit shows 63 pre-existing errors across every backend file (not caused by any specific change) because nothing in the build/test pipeline actually runs a full type-check. This was turned off (verbatimModuleSyntax: false) since it caught nothing real and only added editor noise.
+- Express types `req.params.*` as `string | string[]` (to account for repeated route segments), which conflicts with `noUncheckedIndexedAccess` once that value flows into a Prisma call. Fixed with a small `asString()` normalizer at the top of the route file rather than scattering individual guards everywhere the param is used.
 
 ## Postman
 
@@ -200,7 +201,18 @@ Real authentication is live for candidates: bcrypt-style password hashing (via b
 - Used bcryptjs instead of bcrypt - bcrypt needs a native compile step (node-gyp-build) that can silently fail to run on install, which is a real risk on a build server like Render. bcryptjs is pure JavaScript with the same API, nothing to compile.
 - JWT_SECRET is required in all three environments: local .env, GitHub Actions secrets, and Render's environment variables. Missing it in any one causes login to fail (500 error) only in that environment - this cost real debugging time since local worked fine while CI failed.
 - Employer authentication is not yet built - employers still use the old pattern. Same approach should be applied when that work is picked up.
-- After protecting `PUT /candidates/{id}` with `requireAuth`, one call site was missed: `ProfileRoute.tsx`'s save function still sent no `Authorization` header, so saving your profile silently 401'd for a while after auth shipped. When adding auth to an existing endpoint, grep the frontend for every fetch call to that route, not just the ones touched in the same PR.
 
 ### Future migration
 Once Goyeni has real scale, revisit migrating to an enterprise IAM provider (e.g. Ping Identity) for SSO, MFA, and centralized identity management. Ping Identity has no meaningful free tier and is built for workforce/enterprise identity management, not a natural fit for an early-stage consumer app - building in-house now, with a clear migration path later, is the right sequencing.
+
+## Employment History (Built)
+
+Candidates can add work experience entries directly on their profile - title, employer, start/end dates, city/state, description - shown as a read-only list (styled similar to LinkedIn/Dice) with an Edit toggle that reveals an editable list.
+
+- New `WorkExperience` model, one-to-many from Candidate
+- `endDate` is nullable - a blank end date means "currently working here," rendered as "Present," rather than a separate checkbox
+- Its own route file (`workExperience.ts`), mounted at `/candidates` alongside the existing candidates router, so the full paths read as `/candidates/{candidateId}/experience` - ownership is checked the same way as every other protected route, by comparing the token's candidate ID to the record being touched
+- `GET /candidates/{id}` includes the experience list automatically, ordered most-recent-first
+- Frontend uses `react-datepicker` in month/year mode for the date fields, not the native `<input type="month">` - the native browser picker has a real UX flaw (no visible year-navigation arrows; you have to know to click the year text itself to get a year-selection grid), so a proper library was worth the small dependency
+- Deleting an entry is immediate (calls the DELETE endpoint right away); adding or editing entries is batched and only persists on Save - either the section's own "Save Experience" button, or the main "Save Profile" button, both of which call the same underlying save function
+- Planned for Sprint 3: a "View As Employer" toggle and the actual employer-facing view, so candidates can preview what a recruiter sees before it's live

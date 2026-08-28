@@ -16,6 +16,12 @@ Interactive docs (Swagger): `http://localhost:4000/api-docs`
 - `PATCH /candidates/{id}/disable` — soft-delete (sets isActive to false)
 - `PATCH /candidates/{id}/enable` — re-activate a disabled candidate
 
+## Work Experience
+- `POST /candidates/{candidateId}/experience` — add a work experience entry (requires `Authorization: Bearer <token>`; candidates can only add to their own record)
+- `PUT /candidates/{candidateId}/experience/{experienceId}` — update a work experience entry (requires `Authorization: Bearer <token>`)
+- `DELETE /candidates/{candidateId}/experience/{experienceId}` — delete a work experience entry (requires `Authorization: Bearer <token>`)
+- Work experience entries are included automatically in the response from `GET /candidates/{id}`, ordered most-recent-first by start date
+
 ## Employers
 
 - `GET /employers` — returns all active employers
