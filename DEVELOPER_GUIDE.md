@@ -200,6 +200,7 @@ Real authentication is live for candidates: bcrypt-style password hashing (via b
 - Used bcryptjs instead of bcrypt - bcrypt needs a native compile step (node-gyp-build) that can silently fail to run on install, which is a real risk on a build server like Render. bcryptjs is pure JavaScript with the same API, nothing to compile.
 - JWT_SECRET is required in all three environments: local .env, GitHub Actions secrets, and Render's environment variables. Missing it in any one causes login to fail (500 error) only in that environment - this cost real debugging time since local worked fine while CI failed.
 - Employer authentication is not yet built - employers still use the old pattern. Same approach should be applied when that work is picked up.
+- After protecting `PUT /candidates/{id}` with `requireAuth`, one call site was missed: `ProfileRoute.tsx`'s save function still sent no `Authorization` header, so saving your profile silently 401'd for a while after auth shipped. When adding auth to an existing endpoint, grep the frontend for every fetch call to that route, not just the ones touched in the same PR.
 
 ### Future migration
 Once Goyeni has real scale, revisit migrating to an enterprise IAM provider (e.g. Ping Identity) for SSO, MFA, and centralized identity management. Ping Identity has no meaningful free tier and is built for workforce/enterprise identity management, not a natural fit for an early-stage consumer app - building in-house now, with a clear migration path later, is the right sequencing.
