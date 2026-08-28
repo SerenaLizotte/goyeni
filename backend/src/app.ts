@@ -7,6 +7,7 @@ import { prisma } from "./db";
 import healthRouter from "./routes/health";
 import candidatesRouter from "./routes/candidates";
 import employersRouter from "./routes/employers";
+import workExperienceRouter from "./routes/workExperience";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -32,6 +33,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/health", healthRouter);
 app.use("/candidates", candidatesRouter);
+app.use("/candidates", workExperienceRouter);
 app.use("/employers", employersRouter);
 
 export { prisma };
