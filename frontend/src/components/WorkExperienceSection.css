@@ -1,0 +1,104 @@
+.experience-section {
+  margin-top: var(--spacing-xl);
+}
+
+.experience-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.experience-empty {
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-sm);
+}
+
+.experience-entry-title {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.experience-entry-employer {
+  color: var(--color-text);
+}
+
+.experience-entry-meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: 0.125rem;
+}
+
+.experience-entry-description {
+  margin-top: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  white-space: pre-wrap;
+}
+
+.experience-edit-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.experience-edit-card {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  background-color: white;
+}
+
+.experience-delete-button {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+}
+
+.experience-delete-button:hover {
+  color: #b91c1c;
+}
+
+.experience-date-row {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.experience-date-row > div {
+  flex: 1;
+}
+
+.experience-field-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.experience-add-button {
+  align-self: flex-start;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: white;
+  color: var(--color-card-text);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.experience-save-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}

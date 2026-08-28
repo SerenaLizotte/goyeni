@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Navigate } from "react-router";
 import { useAuth } from "../AuthContext";
 import Breadcrumbs from "../components/Breadcrumbs";
 import BackButton from "../components/BackButton";
 
 function LoginRoute() {
   const navigate = useNavigate();
-  const { login, register } = useAuth();
+  const { login, register, isLoggedIn } = useAuth();
 
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
@@ -14,6 +14,10 @@ function LoginRoute() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  if (isLoggedIn) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

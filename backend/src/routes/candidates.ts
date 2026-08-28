@@ -145,6 +145,7 @@ router.post("/login", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const candidate = await prisma.candidate.findUnique({
     where: { id: req.params.id },
+    include: { workExperiences: { orderBy: { startDate: "desc" } } },
   });
   if (!candidate) {
     return res.status(404).json({ error: "Candidate not found" });

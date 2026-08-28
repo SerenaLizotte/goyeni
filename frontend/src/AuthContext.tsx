@@ -1,5 +1,16 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
+export interface WorkExperience {
+  id: string;
+  title: string;
+  employer: string;
+  city: string | null;
+  state: string | null;
+  startDate: string;
+  endDate: string | null;
+  description: string | null;
+}
+
 export interface Candidate {
   id: string;
   email: string;
@@ -8,8 +19,8 @@ export interface Candidate {
   headline: string | null;
   summary: string | null;
   isActive: boolean;
+  workExperiences?: WorkExperience[];
 }
-
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:4000";
 
 interface AuthContextValue {
